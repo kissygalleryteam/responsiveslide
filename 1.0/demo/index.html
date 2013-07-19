@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="format-detection" content="telephone=no"/>
+    <title>demo标题</title>
+    <script src="../../../../libs/kissy/kissy/build/seed.js" charset="utf-8"></script>
+	<script>
+		var S = KISSY;
+		if (S.Config.debug) {
+			var srcPath = "../../../";
+			S.config({
+				packages:[
+					{
+						name:"gallery",
+						path:srcPath,
+						charset:"utf-8",
+						ignorePackageNameInUri:true
+					}
+				]
+			});
+		}
+	</script>
+	<style>
+	body{
+		font-family:'Microsoft YaHei';
+	}
+	h1{
+		padding-bottom:10px;
+		font-size:24px;
+		border-bottom:1px solid  #ccc;
+	}
+	#test {
+		margin:1em 0;
+		border:1px solid #ccc;
+		padding:10px;
+	}
+	.ks-panel {
+		height:100px;
+	}
+	</style>
+</head>
+
+<h1>响应式Slide</h1>
+
+
+<div id="test">
+	<div class="ks-content">
+		<div class="ks-panel" style="background:red;">11</div>
+		<div class="ks-panel" style="background:yellow;">22</div>
+		<div class="ks-panel" style="background:blue;">33</div>
+	</div>
+</div>
+
+<button id="prev">prev</button>
+<button id="next">next</button>
+
+
+
+<script>
+	document.ontouchmove = function(e) {e.preventDefault()};
+    S.use('gallery/responsiveslide/1.0/index', function (S, Slide) {
+		var $=S.all;
+		var demo1 = new Slide({
+			container:"#test"
+		});
+		
+		$(window).on("resize", function(){
+			demo1.resize();
+		})
+		
+		$("#next").on("click", function(){
+			demo1.next();
+		})
+		$("#prev").on("click", function(){
+			demo1.prev();
+		})
+		
+    })
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
