@@ -7,7 +7,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="format-detection" content="telephone=no"/>
     <title>demo标题</title>
-    <script src="../../../../libs/kissy/kissy/build/seed.js" charset="utf-8"></script>
+    <script src="http://g.tbcdn.cn/tb/item-touch/0.1.8/kissy/seed.js" charset="utf-8"></script>
 	<script>
 		var S = KISSY;
 		if (S.Config.debug) {
@@ -38,9 +38,21 @@
 		border:1px solid #ccc;
 		padding:10px;
 	}
+    .ks-panel-wrap{
+        min-height: 1px;
+    }
 	.ks-panel {
 		height:100px;
 	}
+    .ks-content {
+        overflow: hidden;
+    }
+    .clearfix:after {
+        content: '\20';
+        display: block;
+        height: 0;
+        clear: both;
+    }
 	</style>
 </head>
 
@@ -48,15 +60,17 @@
 
 
 <div id="test">
-	<div class="ks-content">
-		<div class="ks-panel" style="background:red;">11</div>
-		<div class="ks-panel" style="background:yellow;">22</div>
-		<div class="ks-panel" style="background:blue;">33</div>
+	<div class="ks-content clearfix">
+		<div class="ks-panel" style="background:red;height: 300px;">11</div>
+		<div class="ks-panel" style="background:yellow;height: 500px;">22</div>
+		<div class="ks-panel" style="background:blue;height: 400px;">33</div>
 	</div>
 </div>
 
 <button id="prev">prev</button>
 <button id="next">next</button>
+
+<p>改变页面大小试试看</p>
 
 
 
@@ -67,11 +81,11 @@
 		var demo1 = new Slide({
 			container:"#test"
 		});
-		
+
 		$(window).on("resize", function(){
 			demo1.resize();
 		})
-		
+
 		$("#next").on("click", function(){
 			demo1.next();
 		})

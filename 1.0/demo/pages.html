@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="format-detection" content="telephone=no"/>
+    <title>demo标题</title>
+    <script src="http://127.0.0.1:8080/kissy/kissy/build/seed.js" charset="utf-8"></script>
+	<script>
+		var S = KISSY;
+		if (S.Config.debug) {
+			var srcPath = "../../../";
+			S.config({
+				packages:[
+					{
+						name:"gallery",
+						path:srcPath,
+						charset:"utf-8",
+						ignorePackageNameInUri:true
+					}
+				]
+			});
+		}
+	</script>
+	<style>
+	body{
+		font-family:'Microsoft YaHei';
+	}
+
+	</style>
+</head>
+
+<h1>响应式Slide</h1>
+
+
+<div id="test" class="ks-pages">
+    <div class="ks-panel"></div>
+</div>
+
+<button id="prev">prev</button>
+<button id="next">next</button>
+
+
+
+<script>
+KISSY.add("pages", function(S, Base, Node){
+    var $=Node.all;
+
+    function Pages(comConfig) {
+        var self = this;
+        Pages.superclass.constructor.call(self, comConfig);
+        self._init(comConfig);
+    }
+
+    S.extend(Pages, Base, {
+
+        _init: function(config){
+            var self = this,
+                container = $(config.container),
+                panels = container.all("."+self.get("panelCls")),
+                items = {};
+
+
+            if(panels.length<1){
+                S.log("需要一个首页");
+                return;
+            }
+
+            //约定第一个ks-panel就是home       container
+            panels.each(function(item,index){
+                if(index===0){
+                    items["home"] = item;
+                }
+                if(item.hasAttr("data-key")){
+                    items[item.attr("data-key")] = item;
+                }
+            });
+
+            self.set("items",items);
+            self.set("container",container);
+        },
+
+        create: function(cfg){
+            var self = this,
+                key = cfg.key,
+                container = self.get("container"),
+                items = self.get("items");
+
+            if(items[cfg.key]){
+                return;
+                S.log(key+"已存在");
+            }
+
+            var div = $('<div class="'+self.get("panelCls")+'" data-key="'+key+'"></div>');
+
+            container.append(div);
+
+
+            return {
+                show: function(){
+                    self.show(key)
+                }
+            }
+
+        },
+
+
+        show: function(key){
+            var self = this,
+                container = self.get("container"),
+                items = self.get("items").
+                item = items[key],
+                home = items["home"],
+                width = self.get("width"),
+                pos = width * self.get("subWidth");
+
+            if(!item){
+                S.log(key+"不存在");
+                return;
+            }
+
+            //重置CSS
+            container.css({
+                "position":"relative",
+                "overflow":"hidden"
+            });
+
+            home.css({
+                position:"absolute",
+                width:width,
+                left:0
+            });
+
+            item.css({
+                position:"absolute",
+                width:width,
+                left:-width
+            });
+
+            //动画切换
+            home.stop(false).animate({
+                left:-pos
+            }, {
+                duration: .3,
+                //useTransition:true,
+                //easing: "ease-out",
+                //essing: "easeIn",
+                complete: function(){
+                }
+            });
+
+            item.stop(false).animate({
+                left:width-pos
+            }, {
+                duration: .3,
+                complete: function(){
+                }
+            });
+        },
+
+        goHome: function(){
+            var self = this,
+                container = self.get("container"),
+                items = self.get("items").
+                item = items[key],
+                home = items["home"],
+                width = self.get("width"),
+                pos = width * self.get("subWidth"),
+                reset = function(){
+                    //重置CSS
+                    container.css({
+                        "position":"static",
+                        "overflow":"auto"
+                    });
+
+                    home.css({
+                        position:"static",
+                        width:auto,
+                        left:0
+                    });
+
+                    item.css({
+                        position:"static",
+                        width:atuo,
+                        left:0
+                    });
+                };
+
+            //动画切换
+            home.stop(false).animate({
+                left:0
+            }, {
+                duration: .3,
+                complete: function(){
+                }
+            });
+
+            item.stop(false).animate({
+                left:width
+            }, {
+                duration: .3,
+                complete: function(){
+                }
+            });
+        }
+
+
+    },{
+        ATTRS:{
+
+            subWidth:{
+                value: 0.8
+            },
+            panelCls:{
+                value:"ks-panel"
+            }
+            
+        }
+    });
+
+
+    return Pages;
+
+
+},{
+    requires:["base","node"]
+})
+
+KISSY.use("pages",function(S,Pages){
+
+    var page = new Pages({
+        container:"#test"
+    });
+
+    var sku = page.create({
+        key:"sku"
+    });
+
+    debugger;
+    sku.show();
+
+
+})
+
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>
