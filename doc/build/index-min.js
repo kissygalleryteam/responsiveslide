@@ -1,0 +1,2 @@
+/*!build time : 2013-10-10 9:22:06 PM*/
+KISSY.add("kg/responsiveslide/2.0.0/index",function(a,b,c){function d(a){var b=this;d.superclass.constructor.call(b,a)}return b.all,a.extend(d,c,{},{ATTRS:{}}),d},{requires:["node","base"]});
